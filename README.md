@@ -15,13 +15,13 @@ Returns start and end position of each searched word.
 
 ```javascript
 result = {
-word1: {
-start: [x, y]
-end: [x, y]
-}
-word2: {
-start: [x, y]
-end: [x, y]
-}
-}
+	word1: {
+		start: [x, y],
+		end: [x, y],
+	},
+	word2: {
+		start: [x, y],
+		end: [x, y],
+	},
+};
 ```
