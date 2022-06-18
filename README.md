@@ -13,6 +13,7 @@ It finds words within a matrix of strings from:
 
 Returns start and end position of each searched word.
 
+```javascript
 result = {
 word1: {
 start: [x, y]
@@ -23,3 +24,4 @@ start: [x, y]
 end: [x, y]
 }
 }
+```
