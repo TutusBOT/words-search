@@ -12,10 +12,9 @@ export default class WordSearch {
 				for (let j = 0; j < currentMatrix.length; j++) {
 					if (currentMatrix[j] === word[0] && result[word] === undefined) {
 						let start = [i + 1, j + 1];
-						let end = [i + 1, j + word.length];
 						result[word] = {
 							start: start,
-							end: end,
+							end: [i + 1, j + word.length],
 						};
 						// left to right
 						for (let k = 0; k < word.length; k++) {
@@ -37,8 +36,53 @@ export default class WordSearch {
 								}
 							}
 						}
+
+						// checks if matrix is long enough to contain searched word while going from top to bottom
+						if (matrixLength - i >= word.length - 1) {
+							// top to bottom
+							if (result[word] === undefined) {
+								result[word] = {
+									start: start,
+									end: [i + word.length, j + 1],
+								};
+								for (let k = 0; k < word.length - 1; k++) {
+									if (this.matrix[k + i][j] !== word[k]) {
+										result[word] = undefined;
+										break;
+									}
+								}
+							}
+							// top-left to bottom-right
+							if (result[word] === undefined) {
+								result[word] = {
+									start: start,
+									end: [i + word.length, j + word.length],
+								};
+								for (let k = 0; k < word.length; k++) {
+									if (word[k] !== this.matrix[k + i][j + k]) {
+										result[word] = undefined;
+										break;
+									}
+								}
+							}
+							// top-right to bottom-left
+							if (result[word] === undefined) {
+								result[word] = {
+									start: start,
+									end: [i + word.length, j - word.length + 2],
+								};
+								for (let k = 0; k < word.length; k++) {
+									if (word[k] !== this.matrix[k + i][j - k]) {
+										result[word] = undefined;
+										break;
+									}
+								}
+							}
+						}
+						// checks if matrix has enough room to contain search word while going from bottom to top
+						if (i - word.length < -1) continue;
 						// bottom to top
-						if (result[word] === undefined && i - word.length >= -1) {
+						if (result[word] === undefined) {
 							result[word] = {
 								start: start,
 								end: [i - word.length + 2, j + 1],
@@ -50,56 +94,8 @@ export default class WordSearch {
 								}
 							}
 						}
-						// top to bottom
-						if (
-							result[word] === undefined &&
-							matrixLength - i >= word.length - 1
-						) {
-							result[word] = {
-								start: start,
-								end: [i + word.length, j + 1],
-							};
-							for (let k = 0; k < word.length - 1; k++) {
-								if (this.matrix[k + i][j] !== word[k]) {
-									result[word] = undefined;
-									break;
-								}
-							}
-						}
-						// top-left to bottom-right
-						if (
-							result[word] === undefined &&
-							matrixLength - i >= word.length - 1
-						) {
-							result[word] = {
-								start: start,
-								end: [i + word.length, j + word.length],
-							};
-							for (let k = 0; k < word.length; k++) {
-								if (word[k] !== this.matrix[k + i][j + k]) {
-									result[word] = undefined;
-									break;
-								}
-							}
-						}
-						// top-right to bottom-left
-						if (
-							result[word] === undefined &&
-							matrixLength - i >= word.length - 1
-						) {
-							result[word] = {
-								start: start,
-								end: [i + word.length, j - word.length + 2],
-							};
-							for (let k = 0; k < word.length; k++) {
-								if (word[k] !== this.matrix[k + i][j - k]) {
-									result[word] = undefined;
-									break;
-								}
-							}
-						}
 						// bottom-right to top-left
-						if (result[word] === undefined && i - word.length >= -1) {
+						if (result[word] === undefined) {
 							result[word] = {
 								start: start,
 								end: [i - word.length + 2, j - word.length + 2],
@@ -112,7 +108,7 @@ export default class WordSearch {
 							}
 						}
 						// bottom-left to top-right
-						if (result[word] === undefined && i - word.length >= -1) {
+						if (result[word] === undefined) {
 							result[word] = {
 								start: start,
 								end: [i - word.length + 2, j + word.length],
